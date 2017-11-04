@@ -1,0 +1,52 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/elixir:1.5
+      - image: circleci/mysql:5.7
+#        environment:
+#          POSTGRES_USER: postgres
+
+    environment:
+      - APP_VERSION: "0.0.1"
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      # Setup
+      - run: mix local.hex --force
+      - run: mix local.rebar
+
+      # Testing
+      - run: mix deps.get
+      - run: mix test
+
+      # Release & Deploy
+      - run:
+          name: Install some System dependencies
+          command: sudo apt-get update -qq && sudo apt-get install -y ssh rsync
+
+      - run:
+          name: Get Mix dependencies
+          command: MIX_ENV=prod mix deps.get
+      - run:
+          name: Compile App
+          command: MIX_ENV=prod mix compile
+      - run:
+          name: Digest Frontend
+          command: |
+            MIX_ENV=prod mix phx.digest;
+      - run:
+          name: Build App release
+          command: MIX_ENV=prod mix release --upgrade --env=prod;
+
+      - deploy:
+          name: Deploy to Production
+          command: |
+            ssh-keyscan -H $APP_HOST >> ~/.ssh/known_hosts;
+            rsync -ravhz --stats --progress ./_build/prod/rel/$APP_NAME $APP_USER@$APP_HOST:apps;
+      - deploy:
+          name: Post-deploy and App restart on Production
+          command: bash ./.circleci/post-deploy.sh
