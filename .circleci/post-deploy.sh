@@ -21,7 +21,7 @@ ssh $APP_USER@$APP_HOST <<ENDSSH
   # sudo setcap 'cap_net_bind_service=+ep' /home/$APP_USER/$APP_NAME/erts-9.1.2/bin/beam.smp;
 
   echo "starting app";
-  PORT=4000 ./bin/$APP_NAME start >> deploy-log.txt;
+  PORT=4040 ./bin/$APP_NAME start >> deploy-log.txt;
 
   echo "Finished";
 ENDSSH
