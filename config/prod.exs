@@ -21,6 +21,17 @@ config :hello_phoenix, HelloPhoenixWeb.Endpoint,
 # Do not print debug messages in production
 config :logger, level: :info
 
+config :hello_phoenix, HelloPhoenixWeb.Endpoint,
+  secret_key_base: System.get_env("HELLO_PHOENIX_SECRET_KEY_BASE")
+
+# Configure your database
+config :hello_phoenix, HelloPhoenix.Repo,
+  adapter: Ecto.Adapters.MySQL,
+  username: "root",
+  password: "",
+  database: "hello_phoenix_prod",
+  pool_size: 15
+
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key
@@ -57,8 +68,3 @@ config :logger, level: :info
 # start per endpoint:
 #
 #     config :hello_phoenix, HelloPhoenixWeb.Endpoint, server: true
-#
-
-# Finally import the config/prod.secret.exs
-# which should be versioned separately.
-import_config "prod.secret.exs"
