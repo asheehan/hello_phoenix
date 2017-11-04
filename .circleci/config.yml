@@ -44,6 +44,7 @@ jobs:
           name: Install, Compile, and Digest Frontend
           command: |
             cd assets;
+            npm install;
             npm run deploy;
             cd ..;
             MIX_ENV=prod mix phx.digest;
