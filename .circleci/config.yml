@@ -29,14 +29,23 @@ jobs:
           command: sudo apt-get update -qq && sudo apt-get install -y ssh rsync
 
       - run:
+          name: Install nodejs
+          command: |
+            curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -;
+            sudo apt-get update && sudo apt-get install -y nodejs;
+
+      - run:
           name: Get Mix dependencies
           command: MIX_ENV=prod mix deps.get
       - run:
           name: Compile App
           command: MIX_ENV=prod mix compile
       - run:
-          name: Digest Frontend
+          name: Install, Compile, and Digest Frontend
           command: |
+            cd assets;
+            npm install;
+            cd ..;
             MIX_ENV=prod mix phx.digest;
       - run:
           name: Build App release
