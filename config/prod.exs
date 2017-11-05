@@ -28,12 +28,14 @@ config :hello_phoenix, HelloPhoenixWeb.Endpoint,
   secret_key_base: System.get_env("HELLO_PHOENIX_SECRET_KEY_BASE")
 
 # Configure your database
-config :hello_phoenix, HelloPhoenix.Repo,
+config :hello_phoenix, HelloPhoenix.Repo, [
   adapter: Ecto.Adapters.MySQL,
-  username: "root",
-  password: "",
+  hostname: System.get_env("DB_HOSTNAME"),
+  username: System.get_env("DB_USERNAME"),
+  password: System.get_env("DB_PASSWORD"),
   database: "hello_phoenix_prod",
-  pool_size: 15
+  pool_size: 15,
+]
 
 # ## SSL Support
 #
