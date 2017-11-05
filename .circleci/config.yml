@@ -50,7 +50,7 @@ jobs:
             MIX_ENV=prod mix phx.digest;
       - run:
           name: Build App release
-          command: MIX_ENV=prod mix release --upgrade --env=prod;
+          command: MIX_ENV=prod mix release --env=prod;
 
       - deploy:
           name: Deploy to Production
